@@ -1,5 +1,6 @@
 import { Configuration, OpenAIApi } from "openai";
-require('dotenv').config();
+import * as dotenv from 'dotenv';
+dotenv.config()
 
 const configuration = new Configuration({
     organization: process.env.OPEN_AI_ORG,
@@ -8,7 +9,7 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration)
 
-async function getSarcasmResponse(context, message) {
+async function getSarcasm(context, message) {
     const chat = await openai.createChatCompletion({
         model: "gpt-3.5-turbo",
         messages: [
@@ -23,7 +24,7 @@ async function getSarcasmResponse(context, message) {
     return chat.data.choices[0].message.content;
 }
 
-async function getOffensiveLanguageResponse(context, message) {
+async function getOffensiveLanguage(context, message) {
     const chat = await openai.createChatCompletion({
         model: "gpt-3.5-turbo",
         messages: [
@@ -118,7 +119,7 @@ async function getHumour(context, message) {
 //     .then(response => console.log(response))
 //     .catch(err => console.error(err));
 
-getSarcasmResponse("We were talking about Football", "Wow what a brilliant play by the keeper, letting the ball through his hands and conceding a goal")
+getSarcasm("We were talking about Football", "Wow what a brilliant play by the keeper, letting the ball through his hands and conceding a goal")
     .then(response => console.log(response))
     .catch(err => console.error(err));
 
@@ -141,3 +142,65 @@ getSarcasmResponse("We were talking about Football", "Wow what a brilliant play 
 // getEmotion("I can't believe this is happening again. What could i possibly do now?")
 //     .then(response => console.log(response))
 //     .catch(err => console.log(err))
+
+import TelegramBot from 'node-telegram-bot';
+
+const token = '6245980206:AAGtwV5MSFSYiHqqxRB-JjJdLxgxRo79VAg';
+const bot = new TelegramBot(token, { polling: true });
+
+// To store the active command
+let activeCommand = null;
+
+// Handle incoming Telegram messages
+bot.on("message", async (msg) => {
+  const chatId = msg.chat.id;
+  const message = msg.text;
+  
+  // Check if the message is a command
+  if (message.startsWith("/")) {
+    // Set the active command based on the received command
+    activeCommand = message.toLowerCase();
+    bot.sendMessage(chatId, `Command '${activeCommand}' received. Please provide the input for the command.`);
+  } else {
+    // Check if there is an active command
+    if (activeCommand) {
+      let response;
+      
+      // Call the corresponding function based on the active command
+      switch (activeCommand) {
+        case "/sarcasm":
+          response = await getSarcasm("", message);
+          break;
+        case "/offensive":
+          response = await getOffensiveLanguage("", message);
+          break;
+        case "/emotion":
+          response = await getEmotion("", message);
+          break;
+        case "/tone":
+          response = await getTone("", message);
+          break;
+        case "/abstract":
+          response = await getAbstract("", message);
+          break;
+        case "/simplified":
+          response = await getSimplified("", message);
+          break;
+        case "/humour":
+          response = await getHumour("", message);
+          break;
+        // Add more cases for other commands/functions
+        default:
+          response = "Invalid command.";
+          break;
+      }
+      
+      // Send the response back to the user
+      bot.sendMessage(chatId, response);
+      
+      // Reset the active command
+      activeCommand = null;
+    }
+  }
+});
+
