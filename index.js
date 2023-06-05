@@ -111,6 +111,7 @@ async function getHumour(context, message) {
 
     return chat.data.choices[0].message.content;
 }
+
 //Tests for you to try 
 
 
