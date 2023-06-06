@@ -32,91 +32,124 @@ bot.settings((ctx) => {
 } )
 
 bot.command("sarcasm", async (ctx) => {
-    let input = ctx.message.text.split(";");
-    console.log(input);
-    let context =input[0];
-    let message = input[1];
-    console.log(context);
-    console.log(message);
-    let sarcasmResponse = await getSarcasmResponse(context, message);
-    console.log(sarcasmResponse);
-    ctx.reply(sarcasmResponse)
+    try {
+        let input = ctx.message.text.split(";");
+        console.log(input);
+        let context =input[0];
+        let message = input[1];
+        console.log(context);
+        console.log(message);
+        let sarcasmResponse = await getSarcasmResponse(context, message);
+        console.log(sarcasmResponse);
+        ctx.reply(sarcasmResponse);
+    } catch (error) {
+        console.error("Error processing /sarcasm command:", error);
+        ctx.reply("An error occurred while processing the command.");
+    }
 })
 
 bot.command("offensive", async (ctx) => {
-    let input = ctx.message.text.split(";");
-    console.log(input);
-    let context =input[0];
-    let message = input[1];
-    console.log(context);
-    console.log(message);
-    let sarcasmResponse = await getOffensiveLanguageResponse(context, message);
-    console.log(sarcasmResponse);
-    ctx.reply(sarcasmResponse)
+    try {
+        let input = ctx.message.text.split(";");
+        console.log(input);
+        let context =input[0];
+        let message = input[1];
+        console.log(context);
+        console.log(message);
+        let offensiveResponse = await getOffensiveLanguageResponse(context, message);
+        console.log(offensiveResponse);
+        ctx.reply(offensiveResponse);
+    } catch (error) {
+        console.error("Error processing /offensive command:", error);
+        ctx.reply("An error occurred while processing the command.");
+    }
 })
 
 bot.command("emotion", async (ctx) => {
-    let input = ctx.message.text.split(";");
-    console.log(input);
-    let context =input[0];
-    let message = input[1];
-    console.log(context);
-    console.log(message);
-    let sarcasmResponse = await getEmotion(context, message);
-    console.log(sarcasmResponse);
-    ctx.reply(sarcasmResponse)
+    try{
+        let input = ctx.message.text.split(";");
+        console.log(input);
+        let context =input[0];
+        let message = input[1];
+        console.log(context);
+        console.log(message);
+        let emotionResponse = await getEmotion(context, message);
+        console.log(emotionResponse);
+        ctx.reply(emotionResponse);
+    } catch (error) {
+        console.error("Error processing /emotion command:", error);
+        ctx.reply("An error occurred while processing the command.");
+    }
 })
 
 bot.command("tone", async (ctx) => {
-    let input = ctx.message.text.split(";");
-    console.log(input);
-    let context =input[0];
-    let message = input[1];
-    console.log(context);
-    console.log(message);
-    let sarcasmResponse = await getTone(context, message);
-    console.log(sarcasmResponse);
-    ctx.reply(sarcasmResponse)
+    try {
+        let input = ctx.message.text.split(";");
+        console.log(input);
+        let context =input[0];
+        let message = input[1];
+        console.log(context);
+        console.log(message);
+        let toneResponse = await getTone(context, message);
+        console.log(toneResponse);
+        ctx.reply(toneResponse);
+    } catch (error) {
+        console.error("Error processing /tone command:", error);
+        ctx.reply("An error occurred while processing the command.");
+    }
 })
 
 bot.command("abstract", async (ctx) => {
-    let input = ctx.message.text.split(";");
-    console.log(input);
-    let context =input[0];
-    let message = input[1];
-    console.log(context);
-    console.log(message);
-    let sarcasmResponse = await getAbstract(context, message);
-    console.log(sarcasmResponse);
-    ctx.reply(sarcasmResponse)
+    try {
+        let input = ctx.message.text.split(";");
+        console.log(input);
+        let context =input[0];
+        let message = input[1];
+        console.log(context);
+        console.log(message);
+        let abstractResponse = await getAbstract(context, message);
+        console.log(abstractResponse);
+        ctx.reply(abstactResponse);
+    } catch (error) {
+        console.error("Error processing /abstract command:", error);
+        ctx.reply("An error occurred while processing the command.");
+    }
 })
 
 bot.command("simplify", async (ctx) => {
-    let input = ctx.message.text.split(";");
-    console.log(input);
-    let context =input[0];
-    let message = input[1];
-    console.log(context);
-    console.log(message);
-    let sarcasmResponse = await getSimplified(context, message);
-    console.log(sarcasmResponse);
-    ctx.reply(sarcasmResponse)
+    try {
+        let input = ctx.message.text.split(";");
+        console.log(input);
+        let context =input[0];
+        let message = input[1];
+        console.log(context);
+        console.log(message);
+        let simplifyResponse = await getSimplified(context, message);
+        console.log(simplifyResponse);
+        ctx.reply(simplifyResponse);
+    } catch (error) {
+        console.error("Error processing /simplify command:", error);
+        ctx.reply("An error occurred while processing the command.");
+    }
 })
 
 bot.command("humour", async (ctx) => {
-    let input = ctx.message.text.split(";");
-    console.log(input);
-    let context =input[0];
-    let message = input[1];
-    console.log(context);
-    console.log(message);
-    let sarcasmResponse = await getHumour(context, message);
-    console.log(sarcasmResponse);
-    ctx.reply(sarcasmResponse)
-})
-
-
-
+    try {
+        let input = ctx.message.text.split(";");
+        console.log(input);
+        let context = input[0];
+        let message = input[1];
+        console.log(context);
+        console.log(message);
+        let humourResponse = await getHumour(context, message);
+        console.log(humourResponse);
+        ctx.reply(humourResponse);
+    } catch (error) {
+        console.error("Error processing /humour command:", error);
+        ctx.reply("An error occurred while processing the command.");
+    }
+  });
+  
 
 
 bot.use()
