@@ -1,5 +1,11 @@
-import { Configuration, OpenAIApi } from "openai";
-require('dotenv').config();
+const { Configuration, OpenAIApi } = require("openai");
+require('dotenv').config()
+const express = require('express');
+const axios = require('axios');
+const {Telegraf} = require('telegraf');
+
+const app = express();
+app.use(express.json());
 
 const configuration = new Configuration({
     organization: process.env.OPEN_AI_ORG,
@@ -7,6 +13,49 @@ const configuration = new Configuration({
 })
 
 const openai = new OpenAIApi(configuration)
+
+require('dotenv').config();
+
+const bot = new Telegraf(process.env.TELEGRAM_API_TOKEN); 
+
+bot.launch();
+
+bot.start((ctx) => {
+    ctx.state.apple = 5;
+    ctx.reply(ctx.from.first_name + " You have entered the start command");
+    console.log(ctx.from);
+    
+})
+
+bot.settings((ctx) => {
+    ctx.reply("you have entered settings command ")
+} )
+
+bot.command("sarcasm", async (ctx) => {
+    let input = ctx.message.text.split(";");
+    console.log(input);
+    let context =input[0];
+    let message = input[1];
+    console.log(context);
+    console.log(message);
+    let sarcasmResponse = await getSarcasmResponse(context, message);
+    console.log(sarcasmResponse);
+    ctx.reply(sarcasmResponse)
+
+    // Check if sarcasmResponse is not empty or undefined
+    // if (!sarcasmResponse || sarcasmResponse === '') {
+    //     ctx.reply('Error: Sarcasm response was empty.');
+    //     return;
+    // }
+
+    // ctx.reply(sarcasmResponse);
+})
+
+
+
+bot.use()
+
+
 
 async function getSarcasmResponse(context, message) {
     const chat = await openai.createChatCompletion({
@@ -119,9 +168,9 @@ async function getHumour(context, message) {
 //     .then(response => console.log(response))
 //     .catch(err => console.error(err));
 
-getSarcasmResponse("We were talking about Football", "Wow what a brilliant play by the keeper, letting the ball through his hands and conceding a goal")
-    .then(response => console.log(response))
-    .catch(err => console.error(err));
+// getSarcasmResponse("We were talking about Football", "Wow what a brilliant play by the keeper, letting the ball through his hands and conceding a goal")
+//     .then(response => console.log(response))
+//     .catch(err => console.error(err));
 
 // getSarcasmResponse('', 'Yeahhh, I\'m sure THAT is the right answer')
 //     .then(response => console.log(response))
