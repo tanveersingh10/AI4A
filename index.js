@@ -196,7 +196,7 @@ async function getSarcasmResponse(context, message) {
             { role: "system", content: `You are a helpful assistant.`},
             { role: "user", content: context ? `Firstly, this is the context of the conversation. ${context}` : ''} ,
             { role: "assistant", content: "Understood. Now, could you please share the message you want me to analyze?" },
-            { role: "user", content: `Please explain this to me simply as I have autism. 
+            { role: "user", content: `Please explain this to me simply as I have trouble understanding people due to my disability.
                 Is this message sarcastic ? ${message}` },
         ]
     });
@@ -211,7 +211,7 @@ async function getOffensiveLanguageResponse(context, message) {
             { role: "system", content: `You are a helpful assistant.`},
             { role: "user", content: context ? `Firstly, this is the context of the conversation. ${context}` : ''} ,
             { role: "assistant", content: "Which message do you think might be offensive?" },
-            { role: "user", content: `Please explain this to me simply as I have autism. 
+            { role: "user", content: `Please explain this to me simply as I have trouble understanding people due to my disability.
                 Is this message offensive or hurtful? ${message}` },
         ]
     });
@@ -226,7 +226,7 @@ async function getEmotion(context, message) {
             { role: "system", content: `You are a helpful assistant.`},
             { role: "user", content: context ? `Firstly, this is the context of the conversation. ${context}` : ''},
             { role: "assistant", content: "Which message do you think might be offensive?" },
-            { role: "user", content: `Please explain this to me simply as I have autism. 
+            { role: "user", content: `Please explain this to me simply as I have trouble understanding people due to my disability.
                 What is the sentiment or emotion of the following text? ${message}` },
         ]
     });
@@ -241,7 +241,7 @@ async function getTone(context, message) {
             { role: "system", content: `You are a helpful assistant.`},
             { role: "user", content: context ? `Firstly, this is the context of the conversation. ${context}` : ''},
             { role: "assistant", content: "Which message do you think might be offensive?" },
-            { role: "user", content: `Please explain this to me simply as I have autism. 
+            { role: "user", content: `Please explain this to me simply as I have trouble understanding people due to my disability.
                 What is the tone of the following text? ${message}` },
         ]
     });
@@ -257,7 +257,7 @@ async function getAbstract(context, message) {
             { role: "system", content: `You are a helpful assistant.`},
             { role: "user", content: context ? `Firstly, this is the context of the conversation. ${context}` : ''} ,
             { role: "assistant", content: "Understood. Now, could you please share the message you want me to analyze?" },
-            { role: "user", content: `Please explain this to me simply as I have autism. 
+            { role: "user", content: `Please explain this to me simply as I have trouble understanding people due to my disability.
                 What does the following message mean? ${message}` },
         ]
     });
@@ -272,7 +272,7 @@ async function getSimplified(context, message) {
             { role: "system", content: `You are a helpful assistant.`},
             { role: "user", content: context ? `Firstly, this is the context of the conversation. ${context}` : ''},
             { role: "assistant", content: "Understood. Now, could you please share the message you want me to summarise?" },
-            { role: "user", content: `Please summarise this for me as simply as possible, as I have autism. ${message}` },
+            { role: "user", content: `Please summarise this for me as simply as possible, as I have trouble understanding people due to my disability. ${message}` },
         ]
     });
 
@@ -286,7 +286,7 @@ async function getHumour(context, message) {
             { role: "system", content: `You are a helpful assistant.`},
             { role: "user", content: context ? `Firstly, this is the context of the conversation. ${context}` : ''},
             { role: "assistant", content: "Understood. Now, could you please share the message you want me to summarise?" },
-            { role: "user", content: `Was the following message intended as a joke? Please explain why it is or is not funny. ${message}` },
+            { role: "user", content: `Please explain this simply as I have trouble understanding people due to my disability. Was the following message intended as a joke? Please explain why it is or is not funny. ${message}` },
         ]
     });
 
@@ -300,7 +300,7 @@ async function getAppropriate(context, message) {
             { role: "system", content: `You are a helpful assistant.`},
             { role: "user", content: context ? `Firstly, this is the context of the conversation. ${context}` : ''},
             { role: "assistant", content: "Understood. Now, could you please share the message you want me to summarise?" },
-            { role: "user", content: `Please explain to me simply as I have autism. I want to send this message. ${message} 
+            { role: "user", content: `Please explain to me simply as I have trouble understanding people due to my disability.. I want to send this message. ${message} 
             Is the message appropriate for this situation? If not, please 
             help me to paraphrase it.` },
         ]
