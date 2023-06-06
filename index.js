@@ -41,15 +41,81 @@ bot.command("sarcasm", async (ctx) => {
     let sarcasmResponse = await getSarcasmResponse(context, message);
     console.log(sarcasmResponse);
     ctx.reply(sarcasmResponse)
-
-    // Check if sarcasmResponse is not empty or undefined
-    // if (!sarcasmResponse || sarcasmResponse === '') {
-    //     ctx.reply('Error: Sarcasm response was empty.');
-    //     return;
-    // }
-
-    // ctx.reply(sarcasmResponse);
 })
+
+bot.command("offensive", async (ctx) => {
+    let input = ctx.message.text.split(";");
+    console.log(input);
+    let context =input[0];
+    let message = input[1];
+    console.log(context);
+    console.log(message);
+    let sarcasmResponse = await getOffensiveLanguageResponse(context, message);
+    console.log(sarcasmResponse);
+    ctx.reply(sarcasmResponse)
+})
+
+bot.command("emotion", async (ctx) => {
+    let input = ctx.message.text.split(";");
+    console.log(input);
+    let context =input[0];
+    let message = input[1];
+    console.log(context);
+    console.log(message);
+    let sarcasmResponse = await getEmotion(context, message);
+    console.log(sarcasmResponse);
+    ctx.reply(sarcasmResponse)
+})
+
+bot.command("tone", async (ctx) => {
+    let input = ctx.message.text.split(";");
+    console.log(input);
+    let context =input[0];
+    let message = input[1];
+    console.log(context);
+    console.log(message);
+    let sarcasmResponse = await getTone(context, message);
+    console.log(sarcasmResponse);
+    ctx.reply(sarcasmResponse)
+})
+
+bot.command("abstract", async (ctx) => {
+    let input = ctx.message.text.split(";");
+    console.log(input);
+    let context =input[0];
+    let message = input[1];
+    console.log(context);
+    console.log(message);
+    let sarcasmResponse = await getAbstract(context, message);
+    console.log(sarcasmResponse);
+    ctx.reply(sarcasmResponse)
+})
+
+bot.command("simplify", async (ctx) => {
+    let input = ctx.message.text.split(";");
+    console.log(input);
+    let context =input[0];
+    let message = input[1];
+    console.log(context);
+    console.log(message);
+    let sarcasmResponse = await getSimplified(context, message);
+    console.log(sarcasmResponse);
+    ctx.reply(sarcasmResponse)
+})
+
+bot.command("humour", async (ctx) => {
+    let input = ctx.message.text.split(";");
+    console.log(input);
+    let context =input[0];
+    let message = input[1];
+    console.log(context);
+    console.log(message);
+    let sarcasmResponse = await getHumour(context, message);
+    console.log(sarcasmResponse);
+    ctx.reply(sarcasmResponse)
+})
+
+
 
 
 
