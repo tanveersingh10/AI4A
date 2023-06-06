@@ -7,6 +7,25 @@ const {Telegraf} = require('telegraf');
 const app = express();
 app.use(express.json());
 
+const TELEGRAM_API = `https://api.telegram.org/bot${process.env.TELEGRAM_API_TOKEN}`;
+const URI = `/webhook/${process.env.TELEGRAM_API_TOKEN}`
+const WEBHOOK_URL = 'https://0a64-111-65-45-108.ngrok-free.app' +   URI
+
+const init = async () => {
+    const res = await axios.get(`${TELEGRAM_API}/setWebhook?url=${WEBHOOK_URL}`);
+    console.log(res.data);
+}
+
+app.post(URI, async (req, res) => {
+    console.log(req.body);
+    return res.send();
+})
+
+app.listen(5001, async () => {
+    console.log('app running on port 5001');
+    await init();
+})
+
 const configuration = new Configuration({
     organization: process.env.OPEN_AI_ORG,
     apiKey: process.env.OPEN_AI_API_KEY
@@ -21,15 +40,15 @@ const bot = new Telegraf(process.env.TELEGRAM_API_TOKEN);
 bot.launch();
 
 bot.start((ctx) => {
-    ctx.state.apple = 5;
-    ctx.reply(ctx.from.first_name + " You have entered the start command");
+    ctx.reply("Hi " + ctx.from.first_name + " Welcome to SocialGPT! Please type /help to look at our available fucntions");
     console.log(ctx.from);
-    
 })
 
-bot.settings((ctx) => {
-    ctx.reply("you have entered settings command ")
-} )
+bot.help((ctx) => {
+    ctx.reply("To use our functions, provide the command <space> context <semicolon> and the message you wish to analyse");
+    ctx.reply("for example: you could say /sarcasm we are talking about football; the keeper is so good he let in 5 goals");
+    ctx.reply("the available functions are /sarcasm, /offensive, /emotion, /tone, /abstract, /simplify, /humour, /appropriate");
+})
 
 bot.command("sarcasm", async (ctx) => {
     try {
@@ -150,10 +169,24 @@ bot.command("humour", async (ctx) => {
     }
   });
   
-
+bot.command("appropriate", async (ctx) => {
+    try {
+        let input = ctx.message.text.split(";");
+        console.log(input);
+        let context =input[0];
+        let message = input[1];
+        console.log(context);
+        console.log(message);
+        let appropriateResponse = await getAppropriate(context, message);
+        console.log(appropriateResponse);
+        ctx.reply(appropriateResponse);
+    } catch (error) {
+        console.error("Error processing /offensive command:", error);
+        ctx.reply("An error occurred while processing the command.");
+    }
+})
 
 bot.use()
-
 
 
 async function getSarcasmResponse(context, message) {
@@ -225,7 +258,7 @@ async function getAbstract(context, message) {
             { role: "user", content: context ? `Firstly, this is the context of the conversation. ${context}` : ''} ,
             { role: "assistant", content: "Understood. Now, could you please share the message you want me to analyze?" },
             { role: "user", content: `Please explain this to me simply as I have autism. 
-                What does the following message mean mean? ${message}` },
+                What does the following message mean? ${message}` },
         ]
     });
 
@@ -254,6 +287,22 @@ async function getHumour(context, message) {
             { role: "user", content: context ? `Firstly, this is the context of the conversation. ${context}` : ''},
             { role: "assistant", content: "Understood. Now, could you please share the message you want me to summarise?" },
             { role: "user", content: `Was the following message intended as a joke? Please explain why it is or is not funny. ${message}` },
+        ]
+    });
+
+    return chat.data.choices[0].message.content;
+}
+
+async function getAppropriate(context, message) {
+    const chat = await openai.createChatCompletion({
+        model: "gpt-3.5-turbo",
+        messages: [
+            { role: "system", content: `You are a helpful assistant.`},
+            { role: "user", content: context ? `Firstly, this is the context of the conversation. ${context}` : ''},
+            { role: "assistant", content: "Understood. Now, could you please share the message you want me to summarise?" },
+            { role: "user", content: `Please explain to me simply as I have autism. I want to send this message. ${message} 
+            Is the message appropriate for this situation? If not, please 
+            help me to paraphrase it.` },
         ]
     });
 
