@@ -4,19 +4,57 @@ const express = require('express');
 const axios = require('axios');
 const {Telegraf, Scenes, session} = require('telegraf');
 
+
+const { SecretClient } = require("@azure/keyvault-secrets");
+const { DefaultAzureCredential } = require("@azure/identity");
+
+
+async function getEnvironmentVariables() {
+    const credential = new DefaultAzureCredential();
+    const vaultName = "socialgpt-key-vault";
+    const url = 'https://socialgpt-key-vault.vault.azure.net/';
+  
+    const client = new SecretClient(url, credential);
+    const openaikey = "OPEN_AI_API_KEY";
+  
+    const openAiToken = await client.getSecret(openaikey);
+    const telegramBotToken = await client.getSecret("TELEGRAM_API_TOKEN")
+ 
+    return [openAiToken, telegramBotToken];
+  }
+  
+
+  let openaitoken;
+  let telegramtoken;
+
+  // Usage
+  getEnvironmentVariables()
+    .then((variables) => {
+      // Use the retrieved environment variables in your code
+      openaitoken = variables[0];
+      telegramtoken = variables[1];
+    })
+    .catch((error) => {
+      console.error("Error retrieving environment variables from Key Vault:", error);
+    });
+  
+
+
+
 const app = express();
 app.use(express.json());
 
 const configuration = new Configuration({
-    organization: process.env.OPEN_AI_ORG,
-    apiKey: process.env.OPEN_AI_API_KEY
+    apiKey: openaitoken
 })
 
 const openai = new OpenAIApi(configuration)
 
 require('dotenv').config();
 
-const bot = new Telegraf(process.env.TELEGRAM_API_TOKEN); 
+const bot = new Telegraf(telegramtoken, {polling: false}); 
+bot.setWebHook('https://social-gpt.azurewebsites.net/');
+
 
 bot.launch();
 
