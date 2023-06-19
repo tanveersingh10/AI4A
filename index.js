@@ -39,6 +39,7 @@ const bot = new Telegraf(process.env.TELEGRAM_API_TOKEN);
 
 bot.launch();
 
+
 bot.start((ctx) => {
     ctx.reply("Hi " + ctx.from.first_name + " Welcome to SocialGPT! Please type /help to look at our available fucntions");
     console.log(ctx.from);
@@ -128,7 +129,7 @@ bot.command("abstract", async (ctx) => {
         console.log(message);
         let abstractResponse = await getAbstract(context, message);
         console.log(abstractResponse);
-        ctx.reply(abstactResponse);
+        ctx.reply(abstractResponse);
     } catch (error) {
         console.error("Error processing /abstract command:", error);
         ctx.reply("An error occurred while processing the command.");
@@ -197,7 +198,7 @@ async function getSarcasmResponse(context, message) {
             { role: "user", content: context ? `Firstly, this is the context of the conversation. ${context}` : ''} ,
             { role: "assistant", content: "Understood. Now, could you please share the message you want me to analyze?" },
             { role: "user", content: `Please explain this to me simply as I have trouble understanding people due to my disability.
-                Is this message sarcastic ? ${message}` },
+                Is this message sarcastic ? ${message}. Explain very simply and use examples if needed.` },
         ]
     });
 
@@ -272,7 +273,7 @@ async function getSimplified(context, message) {
             { role: "system", content: `You are a helpful assistant.`},
             { role: "user", content: context ? `Firstly, this is the context of the conversation. ${context}` : ''},
             { role: "assistant", content: "Understood. Now, could you please share the message you want me to summarise?" },
-            { role: "user", content: `Please summarise this for me as simply as possible, as I have trouble understanding people due to my disability. ${message}` },
+            { role: "user", content: `Please summarise this for me as simply as possible, as I have trouble understanding people due to my disability. ${message}. Use simple vocabulary.` },
         ]
     });
 
