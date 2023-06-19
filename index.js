@@ -2,7 +2,7 @@ const { Configuration, OpenAIApi } = require("openai");
 require('dotenv').config()
 const express = require('express');
 const axios = require('axios');
-const {Telegraf} = require('telegraf');
+const {Telegraf, Scenes, session} = require('telegraf');
 
 const app = express();
 app.use(express.json());
@@ -20,9 +20,236 @@ const bot = new Telegraf(process.env.TELEGRAM_API_TOKEN);
 
 bot.launch();
 
+const sarcasmWizard = new Scenes.WizardScene('sarcasm-wizard',
+  (ctx) => {
+    ctx.reply("What is the context?");
+
+    //Necessary for store the input
+    ctx.scene.session.user = {};
+
+    //Store the telegram user id
+    ctx.scene.session.user.userId = ctx.from.id;
+    return ctx.wizard.next();
+  },
+  (ctx) => {
+    //Store the entered context
+    ctx.scene.session.user.context = ctx.message.text;
+    ctx.reply("What is the message you wish to check?");
+    return ctx.wizard.next();
+  },
+  async (ctx) => {
+
+    ctx.scene.session.user.message = ctx.message.text;
+
+    let sarcasmResponse = await getSarcasmResponse(ctx.scene.session.user.context, ctx.scene.session.user.message);
+    console.log(sarcasmResponse);
+    ctx.reply(sarcasmResponse);
+
+    //Store the user in a separate controller
+    // userController.StoreUser(ctx.scene.session.user);
+    return ctx.scene.leave(); //<- Leaving a scene will clear the session automatically
+  }
+);
+
+const offensiveWizard = new Scenes.WizardScene('offensive-wizard',
+  (ctx) => {
+    ctx.reply("What is the context?");
+
+    //Necessary for store the input
+    ctx.scene.session.user = {};
+
+    //Store the telegram user id
+    ctx.scene.session.user.userId = ctx.from.id;
+    return ctx.wizard.next();
+  },
+  (ctx) => {
+    //Store the entered context
+    ctx.scene.session.user.context = ctx.message.text;
+    ctx.reply("What is the message you wish to check?");
+    return ctx.wizard.next();
+  },
+  async (ctx) => {
+
+    ctx.scene.session.user.message = ctx.message.text;
+
+    let offensiveResponse = await getOffensiveLanguageResponse(ctx.scene.session.user.context, ctx.scene.session.user.message);
+    console.log(offensiveResponse);
+    ctx.reply(offensiveResponse);
+
+    //Store the user in a separate controller
+    // userController.StoreUser(ctx.scene.session.user);
+    return ctx.scene.leave(); //<- Leaving a scene will clear the session automatically
+  }
+);
+
+const emotionWizard = new Scenes.WizardScene('emotion-wizard',
+  (ctx) => {
+    ctx.reply("What is the context?");
+
+    //Necessary for store the input
+    ctx.scene.session.user = {};
+
+    //Store the telegram user id
+    ctx.scene.session.user.userId = ctx.from.id;
+    return ctx.wizard.next();
+  },
+  (ctx) => {
+    //Store the entered context
+    ctx.scene.session.user.context = ctx.message.text;
+    ctx.reply("What is the message you wish to check?");
+    return ctx.wizard.next();
+  },
+  async (ctx) => {
+
+    ctx.scene.session.user.message = ctx.message.text;
+
+    let emotionResponse = await getEmotion(ctx.scene.session.user.context, ctx.scene.session.user.message);
+    console.log(emotionResponse);
+    ctx.reply(emotionResponse);
+
+    //Store the user in a separate controller
+    // userController.StoreUser(ctx.scene.session.user);
+    return ctx.scene.leave(); //<- Leaving a scene will clear the session automatically
+  }
+);
+
+const toneWizard = new Scenes.WizardScene('tone-wizard',
+  (ctx) => {
+    ctx.reply("What is the context?");
+
+    //Necessary for store the input
+    ctx.scene.session.user = {};
+
+    //Store the telegram user id
+    ctx.scene.session.user.userId = ctx.from.id;
+    return ctx.wizard.next();
+  },
+  (ctx) => {
+    //Store the entered context
+    ctx.scene.session.user.context = ctx.message.text;
+    ctx.reply("What is the message you wish to check?");
+    return ctx.wizard.next();
+  },
+  async (ctx) => {
+
+    ctx.scene.session.user.message = ctx.message.text;
+
+    let toneResponse = await getTone(ctx.scene.session.user.context, ctx.scene.session.user.message);
+    console.log(toneResponse);
+    ctx.reply(toneResponse);
+
+    //Store the user in a separate controller
+    // userController.StoreUser(ctx.scene.session.user);
+    return ctx.scene.leave(); //<- Leaving a scene will clear the session automatically
+  }
+);
+
+const abstractWizard = new Scenes.WizardScene('abstract-wizard',
+  (ctx) => {
+    ctx.reply("What is the context?");
+
+    //Necessary for store the input
+    ctx.scene.session.user = {};
+
+    //Store the telegram user id
+    ctx.scene.session.user.userId = ctx.from.id;
+    return ctx.wizard.next();
+  },
+  (ctx) => {
+    //Store the entered context
+    ctx.scene.session.user.context = ctx.message.text;
+    ctx.reply("What is the message you wish to check?");
+    return ctx.wizard.next();
+  },
+  async (ctx) => {
+
+    ctx.scene.session.user.message = ctx.message.text;
+
+    let abstractResponse = await getAbstract(ctx.scene.session.user.context, ctx.scene.session.user.message);
+    console.log(abstractResponse);
+    ctx.reply(abstractResponse);
+
+    //Store the user in a separate controller
+    // userController.StoreUser(ctx.scene.session.user);
+    return ctx.scene.leave(); //<- Leaving a scene will clear the session automatically
+  }
+);
+
+const simplifyWizard = new Scenes.WizardScene('simplify-wizard',
+  (ctx) => {
+    ctx.reply("What is the context?");
+
+    //Necessary for store the input
+    ctx.scene.session.user = {};
+
+    //Store the telegram user id
+    ctx.scene.session.user.userId = ctx.from.id;
+    return ctx.wizard.next();
+  },
+  (ctx) => {
+    //Store the entered context
+    ctx.scene.session.user.context = ctx.message.text;
+    ctx.reply("What is the message you wish to check?");
+    return ctx.wizard.next();
+  },
+  async (ctx) => {
+
+    ctx.scene.session.user.message = ctx.message.text;
+
+    let simplifyResponse = await getSimplified(ctx.scene.session.user.context, ctx.scene.session.user.message);
+    console.log(simplifyResponse);
+    ctx.reply(simplifyResponse);
+
+    //Store the user in a separate controller
+    // userController.StoreUser(ctx.scene.session.user);
+    return ctx.scene.leave(); //<- Leaving a scene will clear the session automatically
+  }
+);
+
+const humourWizard = new Scenes.WizardScene('humour-wizard',
+  (ctx) => {
+    ctx.reply("What is the context?");
+
+    //Necessary for store the input
+    ctx.scene.session.user = {};
+
+    //Store the telegram user id
+    ctx.scene.session.user.userId = ctx.from.id;
+    return ctx.wizard.next();
+  },
+  (ctx) => {
+    //Store the entered context
+    ctx.scene.session.user.context = ctx.message.text;
+    ctx.reply("What is the message you wish to check?");
+    return ctx.wizard.next();
+  },
+  async (ctx) => {
+
+    ctx.scene.session.user.message = ctx.message.text;
+
+    let humourResponse = await getHumour(ctx.scene.session.user.context, ctx.scene.session.user.message);
+    console.log(humourResponse);
+    ctx.reply(humourResponse);
+
+    //Store the user in a separate controller
+    // userController.StoreUser(ctx.scene.session.user);
+    return ctx.scene.leave(); //<- Leaving a scene will clear the session automatically
+  }
+);
+
+const stage = new Scenes.Stage(
+	[
+        sarcasmWizard, offensiveWizard, emotionWizard, toneWizard, abstractWizard, simplifyWizard, humourWizard
+	]
+)   
+
+bot.use(session()); 
+
+bot.use(stage.middleware()); 
+
 bot.start((ctx) => {
-    ctx.state.apple = 5;
-    ctx.reply(ctx.from.first_name + " You have entered the start command");
+    ctx.reply("Hello " + ctx.from.first_name + "! Welcome! Here are some commands for you to get started\n" + "/sarcasm - detect sarcasm\n/offensive - check if your message is offensive \
+                \n/emotion - detect the emotion of the given message\n/tone - detect the tone of the given message\n/abstract - help you understand a message\n/simplify - helps summarise a message\n/humour - detect if the message has any humour intent");
     console.log(ctx.from);
     
 })
@@ -33,15 +260,7 @@ bot.settings((ctx) => {
 
 bot.command("sarcasm", async (ctx) => {
     try {
-        let input = ctx.message.text.split(";");
-        console.log(input);
-        let context =input[0];
-        let message = input[1];
-        console.log(context);
-        console.log(message);
-        let sarcasmResponse = await getSarcasmResponse(context, message);
-        console.log(sarcasmResponse);
-        ctx.reply(sarcasmResponse);
+        ctx.scene.enter('sarcasm-wizard');
     } catch (error) {
         console.error("Error processing /sarcasm command:", error);
         ctx.reply("An error occurred while processing the command.");
@@ -50,15 +269,7 @@ bot.command("sarcasm", async (ctx) => {
 
 bot.command("offensive", async (ctx) => {
     try {
-        let input = ctx.message.text.split(";");
-        console.log(input);
-        let context =input[0];
-        let message = input[1];
-        console.log(context);
-        console.log(message);
-        let offensiveResponse = await getOffensiveLanguageResponse(context, message);
-        console.log(offensiveResponse);
-        ctx.reply(offensiveResponse);
+        ctx.scene.enter('offensive-wizard');
     } catch (error) {
         console.error("Error processing /offensive command:", error);
         ctx.reply("An error occurred while processing the command.");
@@ -67,15 +278,7 @@ bot.command("offensive", async (ctx) => {
 
 bot.command("emotion", async (ctx) => {
     try{
-        let input = ctx.message.text.split(";");
-        console.log(input);
-        let context =input[0];
-        let message = input[1];
-        console.log(context);
-        console.log(message);
-        let emotionResponse = await getEmotion(context, message);
-        console.log(emotionResponse);
-        ctx.reply(emotionResponse);
+        ctx.scene.enter('emotion-wizard');
     } catch (error) {
         console.error("Error processing /emotion command:", error);
         ctx.reply("An error occurred while processing the command.");
@@ -84,15 +287,7 @@ bot.command("emotion", async (ctx) => {
 
 bot.command("tone", async (ctx) => {
     try {
-        let input = ctx.message.text.split(";");
-        console.log(input);
-        let context =input[0];
-        let message = input[1];
-        console.log(context);
-        console.log(message);
-        let toneResponse = await getTone(context, message);
-        console.log(toneResponse);
-        ctx.reply(toneResponse);
+        ctx.scene.enter('tone-wizard');
     } catch (error) {
         console.error("Error processing /tone command:", error);
         ctx.reply("An error occurred while processing the command.");
@@ -101,15 +296,7 @@ bot.command("tone", async (ctx) => {
 
 bot.command("abstract", async (ctx) => {
     try {
-        let input = ctx.message.text.split(";");
-        console.log(input);
-        let context =input[0];
-        let message = input[1];
-        console.log(context);
-        console.log(message);
-        let abstractResponse = await getAbstract(context, message);
-        console.log(abstractResponse);
-        ctx.reply(abstactResponse);
+        ctx.scene.enter('abstract-wizard');
     } catch (error) {
         console.error("Error processing /abstract command:", error);
         ctx.reply("An error occurred while processing the command.");
@@ -118,15 +305,7 @@ bot.command("abstract", async (ctx) => {
 
 bot.command("simplify", async (ctx) => {
     try {
-        let input = ctx.message.text.split(";");
-        console.log(input);
-        let context =input[0];
-        let message = input[1];
-        console.log(context);
-        console.log(message);
-        let simplifyResponse = await getSimplified(context, message);
-        console.log(simplifyResponse);
-        ctx.reply(simplifyResponse);
+        ctx.scene.enter('simplify-wizard');
     } catch (error) {
         console.error("Error processing /simplify command:", error);
         ctx.reply("An error occurred while processing the command.");
@@ -135,15 +314,7 @@ bot.command("simplify", async (ctx) => {
 
 bot.command("humour", async (ctx) => {
     try {
-        let input = ctx.message.text.split(";");
-        console.log(input);
-        let context = input[0];
-        let message = input[1];
-        console.log(context);
-        console.log(message);
-        let humourResponse = await getHumour(context, message);
-        console.log(humourResponse);
-        ctx.reply(humourResponse);
+        ctx.scene.enter('humour-wizard');
     } catch (error) {
         console.error("Error processing /humour command:", error);
         ctx.reply("An error occurred while processing the command.");
