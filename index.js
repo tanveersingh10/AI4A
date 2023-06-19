@@ -248,79 +248,114 @@ bot.use(session());
 bot.use(stage.middleware()); 
 
 bot.start((ctx) => {
-    ctx.reply("Hello " + ctx.from.first_name + "! Welcome! Here are some commands for you to get started\n" + "/sarcasm - detect sarcasm\n/offensive - check if your message is offensive \
-                \n/emotion - detect the emotion of the given message\n/tone - detect the tone of the given message\n/abstract - help you understand a message\n/simplify - helps summarise a message\n/humour - detect if the message has any humour intent");
-    console.log(ctx.from);
+    // ctx.reply("Hello " + ctx.from.first_name + "! Welcome! Here are some commands for you to get started\n" + "/sarcasm - detect sarcasm\n/offensive - check if your message is offensive \
+    //             \n/emotion - detect the emotion of the given message\n/tone - detect the tone of the given message\n/abstract - help you understand a message\n/simplify - helps summarise a message\n/humour - detect if the message has any humour intent");
+                ctx.reply("Hello " + ctx.from.first_name + "! Welcome! Here are some commands for you to get started\n", {
+                  reply_markup: {
+                      inline_keyboard: [
+                          /* Inline buttons. 2 side-by-side */
+                          [ { text: "Sarcasm", callback_data: "sarcasm" }, { text: "Offensive", callback_data: "offensive" } ],
+
+                          /* Inline buttons. 2 side-by-side */
+                          [ { text: "Emotion", callback_data: "emotion" }, { text: "Tone", callback_data: "tone" } ],
+
+                          /* Inline buttons. 2 side-by-side */
+                          [ { text: "Abstract", callback_data: "abstract" }, { text: "Simplify", callback_data: "simplify" } ],
+
+                          
+                          [ { text: "Humour", callback_data: "humour" }, { text: "Help", callback_data: "help" } ],
+                          
+                          /* Also, we can have URL buttons. */
+                          [ { text: "Open in browser", url: "https://vt.tiktok.com/ZSLrkaoTy/" } ]
+                      ]
+                  }
+              });
+          
+                console.log(ctx.from);
     
 })
+
+bot.action('sarcasm', async (ctx) => {
+  try {
+    ctx.scene.enter('sarcasm-wizard');
+} catch (error) {
+    console.error("Error processing sarcasm command:", error);
+    ctx.reply("An error occurred while processing the command.");
+}
+});
+
+bot.action('offensive', async (ctx) => {
+  try {
+        ctx.scene.enter('offensive-wizard');
+  } catch (error) {
+        console.error("Error processing offensive command:", error);
+        ctx.reply("An error occurred while processing the command.");
+  }
+});
+
+bot.action('emotion', async (ctx) => {
+  try {
+    ctx.scene.enter('emotion-wizard');
+  } catch (error) {
+    console.error("Error processing emotion command:", error);
+    ctx.reply("An error occurred while processing the command.");
+  }
+});
+
+bot.action('tone', async (ctx) => {
+  try {
+    ctx.scene.enter('tone-wizard');
+  } catch (error) {
+    console.error("Error processing tone command:", error);
+    ctx.reply("An error occurred while processing the command.");
+  }
+});
+
+bot.action('abstract', async (ctx) => {
+  try {
+    ctx.scene.enter('abstract-wizard');
+  } catch (error) {
+    console.error("Error processing /abstract command:", error);
+    ctx.reply("An error occurred while processing the command.");
+  }
+});
+
+bot.action('simplify', async (ctx) => {
+  try {
+    ctx.scene.enter('simplify-wizard');
+  } catch (error) {
+    console.error("Error processing /simplify command:", error);
+    ctx.reply("An error occurred while processing the command.");
+  }
+});
+
+
+bot.action('humour', async (ctx) => {
+  try {
+    ctx.scene.enter('humour-wizard');
+  } catch (error) {
+    console.error("Error processing /humour command:", error);
+    ctx.reply("An error occurred while processing the command.");
+  }
+});
+
+bot.action('help', async (ctx) => {
+  try {
+    ctx.reply("Here are our functions below\n" + "Sarcasm - detect sarcasm\nOffensive - check if your message is offensive\
+     \nEmotion - detect the emotion of the given message\nTone - detect the tone of the given message\nAbstract - help you understand a message\
+     \nSimplify - helps summarise a message\nHumour - detect if the message has any humour intent");
+  } catch (error) {
+    console.error("Error processing /help command:", error);
+    ctx.reply("An error occurred while processing the command.");
+  }
+});
+
 
 bot.settings((ctx) => {
     ctx.reply("you have entered settings command ")
 } )
 
-bot.command("sarcasm", async (ctx) => {
-    try {
-        ctx.scene.enter('sarcasm-wizard');
-    } catch (error) {
-        console.error("Error processing /sarcasm command:", error);
-        ctx.reply("An error occurred while processing the command.");
-    }
-})
 
-bot.command("offensive", async (ctx) => {
-    try {
-        ctx.scene.enter('offensive-wizard');
-    } catch (error) {
-        console.error("Error processing /offensive command:", error);
-        ctx.reply("An error occurred while processing the command.");
-    }
-})
-
-bot.command("emotion", async (ctx) => {
-    try{
-        ctx.scene.enter('emotion-wizard');
-    } catch (error) {
-        console.error("Error processing /emotion command:", error);
-        ctx.reply("An error occurred while processing the command.");
-    }
-})
-
-bot.command("tone", async (ctx) => {
-    try {
-        ctx.scene.enter('tone-wizard');
-    } catch (error) {
-        console.error("Error processing /tone command:", error);
-        ctx.reply("An error occurred while processing the command.");
-    }
-})
-
-bot.command("abstract", async (ctx) => {
-    try {
-        ctx.scene.enter('abstract-wizard');
-    } catch (error) {
-        console.error("Error processing /abstract command:", error);
-        ctx.reply("An error occurred while processing the command.");
-    }
-})
-
-bot.command("simplify", async (ctx) => {
-    try {
-        ctx.scene.enter('simplify-wizard');
-    } catch (error) {
-        console.error("Error processing /simplify command:", error);
-        ctx.reply("An error occurred while processing the command.");
-    }
-})
-
-bot.command("humour", async (ctx) => {
-    try {
-        ctx.scene.enter('humour-wizard');
-    } catch (error) {
-        console.error("Error processing /humour command:", error);
-        ctx.reply("An error occurred while processing the command.");
-    }
-  });
-  
 
 
 bot.use()
